@@ -1,0 +1,21 @@
+{
+  "name": "notion-public-detector",
+  "version": "1.0.0",
+  "description": "Detects publicly accessible pages in a workspace for Notion.",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@google/clasp": "^2.3.0",
+    "@types/google-apps-script": "0.0.33",
+    "tslint": "^5.11.0",
+    "tslint-microsoft-contrib": "^6.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "tslint src/*.ts",
+    "lint:fix": "tslint --fix src/*.ts"
+  },
+  "author": "linyows",
+  "license": "MIT",
+  "homepage": "https://github.com/linyows/notion-public-detector"
+}
