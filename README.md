@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="400" src="https://raw.githubusercontent.com/linyows/notion-agent/master/misc/notion-agent-logo.png"> <br><br>
+  <img width="60" src="https://raw.githubusercontent.com/linyows/notion-agent/master/misc/notion-agent-icon.png"> <br><br>
   <strong>Notion Agent</strong> notifies public pages to Slack channel.
 </p>
 
