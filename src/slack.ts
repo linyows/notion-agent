@@ -19,7 +19,7 @@ interface SlackAttachment {
 
 interface SlackPostMessageOpts {
   username: string
-  icon_emoji: string
+  icon_emoji?: string
   link_names: number
   text: string
   attachments?: string

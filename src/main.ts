@@ -4,29 +4,30 @@
  * Copyright (c) 2020 Tomohisa Oda
  */
 
-import { Config as NotionConfig } from './notion'
-import { Detector, Config, SlackConfig } from './detector'
+import { Agent, Config, SlackConfig, NotionConfig } from './agent'
 
-const projectUrl = 'https://github.com/linyows/notion-public-detector'
+const props = PropertiesService.getScriptProperties()
+const repo = 'linyows/notion-agent'
+const num = Math.floor(Math.random() * Math.floor(10))
 
 const notion: NotionConfig = {
-  token: PropertiesService.getScriptProperties().getProperty('NOTION_ACCESS_TOKEN'),
-  workspace: PropertiesService.getScriptProperties().getProperty('NOTION_WORKSPACE')
+  token: props.getProperty('NOTION_ACCESS_TOKEN'),
+  workspace: props.getProperty('NOTION_WORKSPACE')
 }
 
 const slack: SlackConfig = {
-  token: PropertiesService.getScriptProperties().getProperty('SLACK_ACCESS_TOKEN'),
+  token: props.getProperty('SLACK_ACCESS_TOKEN'),
+  channel: props.getProperty('SLACK_CHANNEL'),
   username: 'Notion Agent',
-  text: `Hey, Found public pages! :point_down: -- <${projectUrl}|About>`,
-  iconUrl: 'https://raw.githubusercontent.com/linyows/notion-public-detector/master/misc/notion-agent-icon.png'
+  text: `Hey, See this in your workspace report :point_down: -- <https://github.com/${repo}|What's this?>`,
+  iconUrl: `https://raw.githubusercontent.com/${repo}/master/misc/agent-${num}.png`,
+  contextIconUrl: `https://raw.githubusercontent.com/${repo}/master/misc/notion-agent-icon.png`
 }
-
-const config: Config = { notion, slack }
-const detector = new Detector(config)
 
 /**
  * Main
  */
 function main() {
-  detector.run()
+  const agent = new Agent({ notion, slack })
+  agent.run()
 }

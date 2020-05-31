@@ -1,8 +1,16 @@
 /**
- * Notion Public Detctor
+ * Notion Agent
  *
  * Copyright (c) 2020 Tomohisa Oda
  */
+
+import {
+  LoadPageChunkResponse,
+  LoadUserContentResponse,
+  Space,
+  Block,
+  Permission
+} from './response_types'
 
 export type Config = {
   token: string
@@ -16,7 +24,7 @@ export type Page = {
 }
 
 /**
- * Slack Client
+ * Notion Client
  */
 export class Notion {
   private token: string
@@ -29,7 +37,7 @@ export class Notion {
     this.spaceName = c.workspace
   }
 
-  public request({ endpoint, body }) {
+  public request<T>({ endpoint, body }): T {
     const url = "https://www.notion.so/api/v3/"
 
     const options = {
@@ -48,16 +56,16 @@ export class Notion {
   }
 
   public getTopLevelPages(): Page[] {
-    const res = this.request({ endpoint: 'loadUserContent', body: {} })
+    const res = this.request<LoadUserContentResponse>({ endpoint: 'loadUserContent', body: {} })
 
-    Object.values(res.recordMap.space).map((v: any) => {
+    Object.values(res.recordMap.space).map((v: Space) => {
       if (v.value.name === this.spaceName) {
         this.spaceId = v.value.id
         return
       }
     })
 
-    return Object.values(res.recordMap.block).map((v: any): Page => {
+    return Object.values(res.recordMap.block).map((v: Block): Page => {
       const { id, parent_id, properties, type, permissions } = v.value
       if (parent_id === this.spaceId && properties && properties.hasOwnProperty('title')) {
         return { id, title: properties.title.join(','), isPublic: this.isPublic(permissions) }
@@ -69,7 +77,7 @@ export class Notion {
     })
   }
 
-  public isPublic(permissions: any[]|undefined): boolean {
+  public isPublic(permissions: Permission[]|undefined): boolean {
     if (permissions === undefined) {
       return false
     }
@@ -81,7 +89,7 @@ export class Notion {
     return false
   }
 
-  public loadPageChunk(pageId: string): any[] {
+  public loadPageChunk(pageId: string): Block[] {
     const body = {
       pageId,
       limit: 1000,
@@ -89,7 +97,7 @@ export class Notion {
       chunkNumber: 0,
       verticalColumns: false
     }
-    const res = this.request({ endpoint: 'loadPageChunk', body })
+    const res = this.request<LoadPageChunkResponse>({ endpoint: 'loadPageChunk', body })
 
     if (res && res.recordMap && res.recordMap.hasOwnProperty('block')) {
       return Object.values(res.recordMap.block)
@@ -126,15 +134,14 @@ export class Notion {
     })
   }
 
-  public getPagesRecursively(pages) {
-    let foundPages = []
-
+  public getPagesRecursively(pages): void {
     if (pages.length === 0) {
-      return foundPages
+      return
     }
 
+    let foundPages = []
     for (const page of pages) {
-      console.log(page)
+      //console.log(page)
       Utilities.sleep(1000)
       const gotPages = this.getChildPages(page.id)
       for (const gotPage of gotPages) {
