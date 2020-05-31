@@ -1,5 +1,5 @@
 /**
- * Notion Public Detctor
+ * Notion Agent
  *
  * Copyright (c) 2020 Tomohisa Oda
  */
