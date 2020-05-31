@@ -1,6 +1,6 @@
 <p align="center">
-  <img width="60" src="https://raw.githubusercontent.com/linyows/notion-agent/master/misc/notion-agent-icon.png"> <br><br>
-  <strong>Notion Agent</strong> notifies public pages to Slack channel.
+  <img width="60" src="https://raw.githubusercontent.com/linyows/notion-agent/master/misc/notion-icon.png"> <br><br>
+  <strong>Notion Agent</strong> notifies public pages to Slack channel from GAS.
 </p>
 
 <p align="center">
@@ -23,6 +23,7 @@ Usage
     - NOTION_ACCESS_TOKEN
     - NOTION_WORKSPACE
     - SLACK_ACCESS_TOKEN
+    - SLACK_CHANNEL
 1. Add project trigger(Edit > Current project's triggers > Add trigger)
     - Choose which function to run: `main`
     - Which run at deployment: `head`
