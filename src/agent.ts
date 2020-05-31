@@ -78,7 +78,7 @@ export class Agent {
             elements: [
               {
                 type: "image",
-                image_url: this.config.slack.iconUrl,
+                image_url: this.config.slack.contextIconUrl,
                 alt_text: "Notion Icon"
               },
               {
