@@ -63,7 +63,7 @@ export class Agent {
             type: 'section',
             text: {
               type: 'mrkdwn',
-              text: `*${publics.length}* public page(s) out of *${pages.length}* were found.`
+              text: `*${publics.length}* public pages out of *${pages.length}* were found.`
             }
           },
           {
