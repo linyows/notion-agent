@@ -41,26 +41,24 @@ export class Slack {
     this.token = token
   }
 
-  public joinChannel(channel: string): SlackChannel {
-    const res = UrlFetchApp.fetch('https://slack.com/api/channels.join', {
-      method: 'post',
-      payload: {
-        token: this.token,
-        name: channel
-      }
-    })
+  public request(endpoint: string, body) {
+    const res = UrlFetchApp.fetch(`https://slack.com/api/${endpoint}`, {
+        method: 'post',
+        payload: {
+          token: this.token,
+          ... body
+        }
+      })
+    console.log(body, res.getContentText())
+    return JSON.parse(res.getContentText())
+  }
 
-    return JSON.parse(res.getContentText()).channel
+  public joinChannel(channel: string): SlackChannel {
+    return this.request('channels.join', { name: channel }).channel
   }
 
   public postMessage(channel: string, opts: SlackPostMessageOpts) {
     this.joinChannel(channel)
-
-    const res = UrlFetchApp.fetch('https://slack.com/api/chat.postMessage', {
-      method: 'post',
-      payload: { ...{ token: this.token, channel: channel }, ...opts }
-    })
-
-    return JSON.parse(res.getContentText()).ok
+    return this.request('chat.postMessage', { channel, ...opts }).ok
   }
 }
