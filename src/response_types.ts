@@ -145,7 +145,7 @@ export type Collection = {
 }
 
 export type LoadUserContentResponse = {
-  recordMap: {
+  recordMap?: {
     notion_user: { [index: string]: NotionUser }
     user_root?: { [index: string]: object }
     user_settings: { [index: string]: UserSettings }

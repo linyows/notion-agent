@@ -57,6 +57,7 @@ export class Notion {
     this.count++
     if (res.getResponseCode() !== 200) {
       console.log(endpoint, this.count, res.getResponseCode(), res)
+      return JSON.parse('{}')
     }
 
     return JSON.parse(res.getContentText())
@@ -64,6 +65,10 @@ export class Notion {
 
   public getTopLevelPages(): Page[] {
     const res = this.request<LoadUserContentResponse>({ endpoint: 'loadUserContent', body: {} })
+
+    if (!(res.recordMap && res.recordMap.hasOwnProperty('space') && res.recordMap.hasOwnProperty('block'))) {
+      return []
+    }
 
     Object.values(res.recordMap.space).map((v: Space) => {
       if (v.value.name === this.spaceName) {
