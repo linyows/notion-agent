@@ -4,7 +4,7 @@
 </p>
 
 <p align="center">
-<a href="https://travis-ci.org/linyows/notion-agent" title="travis"><img src="https://img.shields.io/travis/linyows/notion-agent.svg?style=for-the-badge"></a>
+<a href="https://github.com/linyows/notion-agent/actions" title="actions"><img src="https://img.shields.io/github/workflow/status/linyows/notion-agent/build?style=for-the-badge"></a>
 <a href="https://github.com/google/clasp" title="clasp"><img src="https://img.shields.io/badge/built%20with-clasp-4285f4.svg?style=for-the-badge"></a>
 <a href="https://github.com/linyows/notion-agent/blob/master/LICENSE" title="MIT License"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge"></a>
 </p>
