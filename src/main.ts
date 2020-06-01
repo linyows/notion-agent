@@ -21,7 +21,7 @@ const slack: SlackConfig = {
   username: 'Notion Agent',
   text: `Hey, See this in your workspace report :point_down: -- <https://github.com/${repo}|What's this?>`,
   iconUrl: `https://raw.githubusercontent.com/${repo}/master/misc/agent-${num}.png`,
-  contextIconUrl: `https://raw.githubusercontent.com/${repo}/master/misc/notion-agent-icon.png`
+  contextIconUrl: `https://raw.githubusercontent.com/${repo}/master/misc/notion-icon.png`
 }
 
 /**
