@@ -149,7 +149,7 @@ export class Notion {
     let foundPages = []
     for (const page of pages) {
       //console.log(page)
-      Utilities.sleep(1000)
+      Utilities.sleep(Math.floor(Math.random() * Math.floor(10)) + 100)
       const gotPages = this.getChildPages(page.id)
       for (const gotPage of gotPages) {
         if (this.stackedPages.some(el => el.id === gotPage.id)) {
