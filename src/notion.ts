@@ -30,11 +30,13 @@ export class Notion {
   private token: string
   private spaceName: string
   private spaceId: string
+  private count: number
   private stackedPages: Page[]
 
   public constructor(c: Config) {
     this.token = c.token
     this.spaceName = c.workspace
+    this.count = 0
   }
 
   public request<T>({ endpoint, body }): T {
@@ -48,9 +50,14 @@ export class Notion {
         cookie: `token_v2=${this.token};`
       },
       method: 'post' as const,
+      muteHttpExceptions: true,
       payload: JSON.stringify(body)
     }
     const res = UrlFetchApp.fetch(`${url}${endpoint}`, options)
+    this.count++
+    if (res.getResponseCode() !== 200) {
+      console.log(endpoint, this.count, res.getResponseCode(), res)
+    }
 
     return JSON.parse(res.getContentText())
   }
