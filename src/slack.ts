@@ -4,33 +4,6 @@
  * Copyright (c) 2020 Tomohisa Oda
  */
 
-interface SlackField {
-  title: string
-  value: string
-}
-
-interface SlackAttachment {
-  title: string
-  title_link: string
-  color: string
-  text: string
-  fields?: SlackField[]
-}
-
-interface SlackPostMessageOpts {
-  username: string
-  icon_emoji?: string
-  link_names: number
-  text: string
-  attachments?: string
-}
-
-interface SlackChannel {
-  id: string
-  name: string
-  members: string[]
-}
-
 /**
  * Slack Client
  */
@@ -41,24 +14,66 @@ export class Slack {
     this.token = token
   }
 
-  public request(endpoint: string, body) {
+  public request<T>({ endpoint, body }): T {
     const res = UrlFetchApp.fetch(`https://slack.com/api/${endpoint}`, {
-        method: 'post',
-        payload: {
-          token: this.token,
-          ... body
-        }
-      })
+      method: 'post',
+      payload: {
+        token: this.token,
+        ...body,
+      },
+    })
     console.log(body, res.getContentText())
     return JSON.parse(res.getContentText())
   }
 
-  public joinChannel(channel: string): SlackChannel {
-    return this.request('channels.join', { name: channel }).channel
+  public joinChannel(channel: string): Channel {
+    return this.request<JoinChannelResponse>({
+      endpoint: 'channels.join',
+      body: { name: channel },
+    }).channel
   }
 
-  public postMessage(channel: string, opts: SlackPostMessageOpts) {
-    this.joinChannel(channel)
-    return this.request('chat.postMessage', { channel, ...opts }).ok
+  public postMessage(body: PostMessage): boolean {
+    this.joinChannel(body.channel)
+    return this.request<PostMessageResponse>({
+      endpoint: 'chat.postMessage',
+      body,
+    }).ok
   }
+}
+
+type PostMessage = {
+  channel: string
+  username: string
+  icon_emoji?: string
+  link_names: number
+  text: string
+  attachments?: string
+}
+
+type PostMessageResponse = {
+  ok: boolean
+  channel: string
+  ts: string
+  message: {
+    type: string
+    subtype: string
+    text: string
+    ts: string
+    username: string
+    //icon_emoji?: any
+    bot_id?: string
+    //attachments?: any
+  }
+}
+
+type Channel = {
+  id: string
+  name: string
+  members: string[]
+}
+
+type JoinChannelResponse = {
+  ok: boolean
+  channel: Channel
 }
