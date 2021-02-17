@@ -26,11 +26,41 @@ export class Slack {
     return JSON.parse(res.getContentText())
   }
 
-  public joinChannel(channel: string): Channel {
-    return this.request<JoinChannelResponse>({
-      endpoint: 'channels.join',
-      body: { name: channel },
+  public channelList(c: string): ListConversationResponse {
+    return this.request<ListConversationResponse>({
+      endpoint: 'conversations.list',
+      body: {
+        exclude_archived: true,
+        limit: 1000,
+        cursor: c,
+      },
+    })
+  }
+
+  public channelListAll(): Channel[] {
+    let channels: Channel[] = []
+    let cursor: string = ''
+    while (true) {
+      const c = this.channelList(cursor)
+      channels = [...channels, ...c.channels]
+      cursor = c.response_metadata.next_cursor
+      if (cursor === '') {
+        break
+      }
+    }
+    return channels
+  }
+
+  public joinConversation(channel: string): Channel {
+    return this.request<JoinConversationResponse>({
+      endpoint: 'conversations.join',
+      body: { channel },
     }).channel
+  }
+
+  public joinChannel(channel: string): Channel {
+    const c = this.channelListAll().find(v => v.name === channel)
+    return this.joinConversation(c.id)
   }
 
   public postMessage(body: PostMessage): boolean {
@@ -70,10 +100,17 @@ type PostMessageResponse = {
 type Channel = {
   id: string
   name: string
-  members: string[]
 }
 
-type JoinChannelResponse = {
+type JoinConversationResponse = {
   ok: boolean
   channel: Channel
+}
+
+type ListConversationResponse = {
+  ok: boolean
+  channels: Channel[]
+  response_metadata: {
+    next_cursor: string
+  }
 }
